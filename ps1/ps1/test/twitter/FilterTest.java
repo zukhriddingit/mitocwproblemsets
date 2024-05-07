@@ -32,14 +32,19 @@ public class FilterTest {
     
     @Test
     public void testWrittenByMultipleTweetsSingleResult() {
-        List<Tweet> writtenBy = Filter.writtenBy(Arrays.asList(tweet1, tweet2), "alyssa");
-        
+        assertNotEquals("Distinct IDs",tweet1.getId(), tweet2.getId());
+        String username = "alyssa";
+        List<Tweet> writtenBy = Filter.writtenBy(Arrays.asList(tweet1, tweet2), username);
+        assertTrue(username.matches("^[a-zA-Z0-9_-]+$"));
         assertEquals("expected singleton list", 1, writtenBy.size());
         assertTrue("expected list to contain tweet", writtenBy.contains(tweet1));
+        assertEquals("Wrong return", List.of(tweet1), writtenBy);
+
     }
     
     @Test
     public void testInTimespanMultipleTweetsMultipleResults() {
+        assertNotEquals("Distinct IDs",tweet1.getId(), tweet2.getId());
         Instant testStart = Instant.parse("2016-02-17T09:00:00Z");
         Instant testEnd = Instant.parse("2016-02-17T12:00:00Z");
         
@@ -48,15 +53,20 @@ public class FilterTest {
         assertFalse("expected non-empty list", inTimespan.isEmpty());
         assertTrue("expected list to contain tweets", inTimespan.containsAll(Arrays.asList(tweet1, tweet2)));
         assertEquals("expected same order", 0, inTimespan.indexOf(tweet1));
+        assertEquals("expected same order", 1, inTimespan.indexOf(tweet2));
+
     }
     
     @Test
     public void testContaining() {
+        assertNotEquals("Distinct IDs",tweet1.getId(), tweet2.getId());
         List<Tweet> containing = Filter.containing(Arrays.asList(tweet1, tweet2), Arrays.asList("talk"));
         
         assertFalse("expected non-empty list", containing.isEmpty());
         assertTrue("expected list to contain tweets", containing.containsAll(Arrays.asList(tweet1, tweet2)));
         assertEquals("expected same order", 0, containing.indexOf(tweet1));
+        assertEquals("expected same order", 1, containing.indexOf(tweet2));
+
     }
 
     /*

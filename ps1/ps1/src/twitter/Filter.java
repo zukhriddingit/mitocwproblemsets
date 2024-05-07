@@ -3,7 +3,11 @@
  */
 package twitter;
 
+import org.hamcrest.core.AnyOf;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Filter consists of methods that filter a list of tweets for those matching a
@@ -27,7 +31,13 @@ public class Filter {
      *         in the same order as in the input list.
      */
     public static List<Tweet> writtenBy(List<Tweet> tweets, String username) {
-        throw new RuntimeException("not implemented");
+        List<Tweet> tweetsByUser = new ArrayList<>();
+        for (Tweet tweet : tweets){
+            if (Objects.equals(tweet.getAuthor(), username)){
+                tweetsByUser.add(tweet);
+            }
+        }
+        return tweetsByUser;
     }
 
     /**
@@ -41,7 +51,13 @@ public class Filter {
      *         in the same order as in the input list.
      */
     public static List<Tweet> inTimespan(List<Tweet> tweets, Timespan timespan) {
-        throw new RuntimeException("not implemented");
+        List<Tweet> tweetsAtTime = new ArrayList<>();
+        for (Tweet tweet : tweets){
+            if (tweet.getTimestamp().isAfter(timespan.getStart()) && tweet.getTimestamp().isBefore(timespan.getEnd())){
+                tweetsAtTime.add(tweet);
+            }
+        }
+        return tweetsAtTime;
     }
 
     /**
@@ -60,7 +76,15 @@ public class Filter {
      *         same order as in the input list.
      */
     public static List<Tweet> containing(List<Tweet> tweets, List<String> words) {
-        throw new RuntimeException("not implemented");
+        List<Tweet> tweetsWithWord = new ArrayList<>();
+        for (Tweet tweet : tweets){
+            for (String word : words){
+                if (tweet.getText().contains(word)){
+                    tweetsWithWord.add(tweet);
+                }
+            }
+        }
+        return tweetsWithWord;
     }
 
 }
