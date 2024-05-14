@@ -74,4 +74,17 @@ public class Extract {
         return hashSet;
     }
 
+    public static Set<String> getHashtags(List<Tweet> tweets) {
+        Set<String> hashSet = new HashSet<>();
+        String patternString = "#\\w+";
+
+        for (Tweet tweet : tweets){
+            Pattern pattern = Pattern.compile(patternString);
+            Matcher matcher = pattern.matcher(tweet.getText());
+            while (matcher.find()) {
+                hashSet.add(matcher.group(0));
+            }
+        }
+        return hashSet;
+    }
 }

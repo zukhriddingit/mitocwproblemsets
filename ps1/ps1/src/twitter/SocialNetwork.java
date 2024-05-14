@@ -41,6 +41,8 @@ public class SocialNetwork {
      */
     public static Map<String, Set<String>> guessFollowsGraph(List<Tweet> tweets) {
         Map<String, Set<String>> followers = new HashMap<>();
+        Map<String, Set<String>> hashtagUsers = new HashMap<>();
+
 
         for (Tweet tweet : tweets){
             String author = tweet.getAuthor();
@@ -51,7 +53,26 @@ public class SocialNetwork {
             }
 
             followers.put(author, mentions);
+
+            Set<String> hashtags = Extract.getHashtags(Arrays.asList(tweet));
+            for (String hashtag : hashtags) {
+                if (!hashtagUsers.containsKey(hashtag)) {
+                    hashtagUsers.put(hashtag, new HashSet<>());
+                }
+                hashtagUsers.get(hashtag).add(author);
+            }
         }
+
+        for (Set<String> users : hashtagUsers.values()) {
+            for (String user1 : users) {
+                for (String user2 : users) {
+                    if (!user1.equals(user2)) {
+                        followers.get(user1).add(user2);
+                    }
+                }
+            }
+        }
+
 
         return followers;
 

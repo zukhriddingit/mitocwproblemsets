@@ -26,8 +26,8 @@ public class SocialNetworkTest {
     private static final Instant d2 = Instant.parse("2016-02-17T11:00:00Z");
     private static final Instant d3 = Instant.parse("2016-02-17T12:00:00Z");
 
-    private static final Tweet tweet1 = new Tweet(1, "alyssa", "is it reasonable to talk @about rivest @sasha so much?", d1);
-    private static final Tweet tweet2 = new Tweet(2, "bbitdiddle", "rivest in @sanjar 30  @about minutes #hype @sasha", d2);
+    private static final Tweet tweet1 = new Tweet(1, "alyssa", "is it reasonable to talk @about rivest #hey @sasha so much?", d1);
+    private static final Tweet tweet2 = new Tweet(2, "bitdiddle", "rivest in @sanjar 30  @about minutes #hey #hype @sasha", d2);
     private static final Tweet tweet3 = new Tweet(3, "beta", "hello there! general kenobi @sasha", d3);
 
 
@@ -45,8 +45,8 @@ public class SocialNetworkTest {
         tweets.add(tweet3);
         Map<String, Set<String>> followsGraph = SocialNetwork.guessFollowsGraph(tweets);
         Map<String, Set<String>> testMap = new HashMap<>();
-        testMap.put("alyssa", Set.of("@about", "@sasha"));
-        testMap.put("bbitdiddle", Set.of("@sanjar", "@about", "@sasha"));
+        testMap.put("alyssa", Set.of("@about", "@sasha", "bitdiddle"));
+        testMap.put("bitdiddle", Set.of("@sanjar", "@about", "@sasha", "alyssa"));
         testMap.put("beta", Set.of("@sasha"));
         assertTrue("expected empty graph", follows.isEmpty());
         assertEquals("Implementation wrong!", testMap, followsGraph);
@@ -56,7 +56,8 @@ public class SocialNetworkTest {
     public void testInfluencersEmpty() {
         Map<String, Set<String>> followsGraph = new HashMap<>();
         List<String> influencers = SocialNetwork.influencers(followsGraph);
-        
+
+
         assertTrue("expected empty list", influencers.isEmpty());
 
         List<Tweet> tweets = new ArrayList<>();
@@ -66,7 +67,10 @@ public class SocialNetworkTest {
         List<String> influencers2 = new ArrayList<>();
         influencers2.add("@sasha");
         influencers2.add("@about");
+        influencers2.add("bitdiddle");
+        influencers2.add("alyssa");
         influencers2.add("@sanjar");
+
 
         Map<String, Set<String>> followsGraph2 = SocialNetwork.guessFollowsGraph(tweets);
         List<String> actualInfluencers = SocialNetwork.influencers(followsGraph2);
